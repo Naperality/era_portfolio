@@ -6,7 +6,7 @@ A minimalist and elegant online portfolio designed for **Era**, an aspiring back
 
 ## 🌐 Live Demo
 
-🔗 [View the Live Portfolio](https://your-vercel-link.vercel.app)
+🔗 [View the Live Portfolio](https://era-portfolio-sigma.vercel.app/)
 
 ---
 
