@@ -17,7 +17,7 @@ A minimalist and elegant online portfolio designed for **Era**, an aspiring back
 - 📱 Responsive design for mobile, tablet, and desktop
 - ⚡ Fast loading with clean, modern layout
 - 🔍 SEO-friendly and shareable
-- 🔗 Social media integration (Instagram, ArtStation, YouTube)
+- 🔗 Social media integration (LinkedIn, Email, etc.)
 
 ---
 
@@ -35,6 +35,7 @@ A minimalist and elegant online portfolio designed for **Era**, an aspiring back
 era_portfolio/
 ├── public/ # Static assets (images, videos, icons)
 ├── app/
+│ ├── videos/ # Artwork gallery pages
 │ ├── gallery/ # Artwork gallery pages
 │ ├── about/ # Artist biography
 │ └── contact/ # Contact links or form
@@ -53,7 +54,7 @@ To run this project locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/era_portfolio.git
+git clone https://github.com/Naperality/era_portfolio.git
 
 # Navigate into the project directory
 cd era_portfolio
@@ -79,4 +80,4 @@ This project is licensed under the MIT License.
 For inquiries or collaboration:
 
 📧 Contact Form
-📬 Or email at: example@email.com
+📬 Or email at: naperality@gmail.com
