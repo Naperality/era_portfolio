@@ -1,6 +1,27 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 export default function AboutPage() {
+  const [fading, setFading] = useState(false);
+  const router = useRouter();
+
+  const handleBack = () => {
+    setFading(true);
+    setTimeout(() => {
+      router.push("/");
+    }, 600); // Match fade duration
+  }
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16">
+    <div className={`max-w-3xl mx-auto px-4 py-16 ${fading ? "animate-fade-out" : "animate-fade-in"}`}>
+      <button
+        onClick={handleBack}
+        className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition"
+      >
+        ← Back to Home
+      </button>
+      
       <h1 className="text-4xl font-bold mb-6 text-center">About the Artist</h1>
       <p className="text-lg leading-relaxed mb-4">
         Hi! I'm <strong>Era</strong>, a digital artist passionate about creating atmospheric backgrounds and expressive character designs. 
