@@ -68,16 +68,16 @@ npm run dev
 # Open in your browser
 http://localhost:3000
 
-👩🏻 About the Artist
-“I create worlds and moments through color and composition. My work blends emotion, storytelling, and imagination.”
+##👩🏻 About the Artist
+- “I create worlds and moments through color and composition. My work blends emotion, storytelling, and imagination.”
 
-Era is a digital illustrator with a passion for background design and character creation. Her art is inspired by animation, games, and everyday life. She works primarily in Photoshop and Clip Studio Paint, and continues to explore new visual styles.
+- Era is a digital illustrator with a passion for background design and character creation. Her art is inspired by animation, games, and everyday life. She works primarily in Photoshop and Clip Studio Paint, and continues to explore new visual styles.
 
-📃 License
-This project is licensed under the MIT License.
+##📃 License
+- This project is licensed under the MIT License.
 
-💌 Contact
-For inquiries or collaboration:
+##💌 Contact
+- For inquiries or collaboration:
 
-📧 Contact Form
-📬 Or email at: naperality@gmail.com
+- 📧 Contact Form
+- 📬 Or email at: naperality@gmail.com
