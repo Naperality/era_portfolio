@@ -30,21 +30,22 @@ A minimalist and elegant online portfolio designed for **Era**, an aspiring back
 
 ---
 
-## 📂 Folder Structure
+## 📁 Folder Structure
 
+```
 era_portfolio/
-├── public/ # Static assets (images, videos, icons)
+├── public/               # Static assets (images, videos, icons)
 ├── app/
-│ ├── videos/ # Artwork gallery pages
-│ ├── gallery/ # Artwork gallery pages
-│ ├── about/ # Artist biography
-│ └── contact/ # Contact links or form
-├── components/ # Reusable components (Navbar, Footer, etc.)
-├── styles/ # Global and custom styles
-├── tailwind.config.js # Tailwind configuration
-├── README.md # You're reading it!
+│   ├── videos/           # Artwork gallery pages (videos)
+│   ├── gallery/          # Artwork gallery pages (images)
+│   ├── about/            # Artist biography
+│   └── contact/          # Contact links or form
+├── components/           # Reusable components (Navbar, Footer, etc.)
+├── styles/               # Global and custom styles
+├── tailwind.config.js    # Tailwind CSS configuration
+├── README.md             # Project overview
 └── ...
-
+```
 
 ---
 
@@ -68,15 +69,22 @@ npm run dev
 # Open in your browser
 http://localhost:3000
 
-##👩🏻 About the Artist
+```
+---
+
+## 👩🏻 About the Artist
 - “I create worlds and moments through color and composition. My work blends emotion, storytelling, and imagination.”
 
 - Era is a digital illustrator with a passion for background design and character creation. Her art is inspired by animation, games, and everyday life. She works primarily in Photoshop and Clip Studio Paint, and continues to explore new visual styles.
 
-##📃 License
+---
+
+## 📃 License
 - This project is licensed under the MIT License.
 
-##💌 Contact
+---
+
+## 💌 Contact
 - For inquiries or collaboration:
 
 - 📧 Contact Form
