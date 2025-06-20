@@ -18,7 +18,7 @@ export const metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Era Art Portfolio",
+    title: "Eirah Art",
     description: "Explore beautiful background illustrations and original character designs.",
     url: "https://era-portfolio-sigma.vercel.app/",
     siteName: "Era Portfolio",
@@ -35,7 +35,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Era Art Portfolio",
+    title: "Eirah Art",
     description: "Explore beautiful background illustrations and original character designs.",
     images: ["/og-image.png"],
     creator: "@yourTwitter",
