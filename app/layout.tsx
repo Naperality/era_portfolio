@@ -24,7 +24,7 @@ export const metadata = {
     siteName: "Era Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://era-portfolio-sigma.vercel.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Era's Artwork",
