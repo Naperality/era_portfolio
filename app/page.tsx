@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [fading, setFading] = useState(false);
@@ -11,30 +12,39 @@ export default function Home() {
     setFading(true);
     setTimeout(() => {
       router.push("/gallery");
-    }, 600); // match fade-out duration
+    }, 600);
   };
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen text-center px-6 bg-gradient-to-b from-pink-100 via-white to-white">
-      <div
-        className={`max-w-4xl w-full px-4 sm:px-8 space-y-6 mx-auto ${
-          fading ? "animate-fade-out" : "animate-fade-in"
-        }`}
+    <section className="relative flex flex-col items-center justify-center min-h-screen px-6 overflow-hidden bg-transparent">
+      {/* Artistic background brush strokes */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-[url('/brush-stroke1.svg')] bg-no-repeat bg-contain opacity-20 rotate-12" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-[url('/brush-stroke2.svg')] bg-no-repeat bg-contain opacity-20 -rotate-12" />
+
+      {/* Content */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: fading ? 0 : 1, y: fading ? -20 : 0 }}
+        transition={{ duration: 0.6 }}
+        className="z-10 max-w-3xl w-full text-center space-y-8"
       >
-        <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
-          Welcome to <span className="text-pink-600">Era's Portfolio</span>
+        <h1 className="text-5xl md:text-6xl font-bold leading-tight text-gray-900 font-serif">
+          <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-red-400 to-purple-600">
+            Eirah’s Dreamscape
+          </span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-700">
-          Dive into a dreamy world of background illustrations, character designs, and
-          creative timelapse videos crafted with heart and imagination.
+        <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto font-light">
+          Explore a canvas of dreamy <span className="italic">backgrounds</span>, enchanting{" "}
+          <span className="italic">characters</span>, and soulful{" "}
+          <span className="italic">timelapses</span> — all brushed with imagination.
         </p>
         <button
           onClick={handleFadeOut}
-          className="inline-block px-6 py-3 mt-4 text-white bg-pink-600 hover:bg-pink-700 rounded-full text-lg transition"
+          className="px-8 py-3 mt-6 text-white bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 rounded-full text-lg shadow-lg transition duration-300"
         >
-          View Portfolio
+          Enter Gallery
         </button>
-      </div>
+      </motion.div>
     </section>
   );
 }
