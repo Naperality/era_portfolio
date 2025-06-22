@@ -20,11 +20,11 @@ export const metadata = {
   openGraph: {
     title: "Eirah Art",
     description: "Explore beautiful background illustrations and original character designs.",
-    url: "https://era-portfolio-sigma.vercel.app/",
+    url: "https://eirah-gallery.vercel.app/",
     siteName: "Era Portfolio",
     images: [
       {
-        url: "https://era-portfolio-sigma.vercel.app/og-image.png",
+        url: "https://eirah-gallery.vercel.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Era's Artwork",
@@ -37,7 +37,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Eirah Art",
     description: "Explore beautiful background illustrations and original character designs.",
-    images: ["/og-image.png"],
+    images: ["https://eirah-gallery.vercel.app/og-image.png"],
     creator: "@yourTwitter",
   },
 };
