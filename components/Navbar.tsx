@@ -7,7 +7,7 @@ export default function Navbar() {
         <Link href="/" className="text-xl font-bold text-pink-600">Eirah Art</Link>
         <div className="space-x-4">
           <Link href="/gallery" className="hover:text-pink-600">Gallery</Link>
-          <Link href="/videos" className="hover:text-pink-600">Videos</Link>
+          <Link href="/videos" className="hover:text-pink-600">Services</Link>
           <Link href="/about" className="hover:text-pink-600">About</Link>
           <Link href="/contact" className="hover:text-pink-600">Contacts</Link>
         </div>

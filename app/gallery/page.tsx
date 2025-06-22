@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const artworks = ["/images/art1.jpg", "/images/art2.jpg", "/images/art3.jpg"];
+const videos = ["/videos/video1.mp4", "/videos/video2.mp4"];
 
 export default function GalleryPage() {
   const [fading, setFading] = useState(false);
@@ -38,6 +40,24 @@ return (
           </div>
         ))}
       </div>
+
+      {/* Video Gallery */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {videos.map((src, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: fading ? 0 : 1, scale: fading ? 0.95 : 1 }}
+              transition={{ duration: 0.6 }}
+              className="rounded-2xl overflow-hidden shadow-xl bg-white/70 backdrop-blur-sm"
+            >
+              <video controls className="w-full h-full">
+                <source src={src} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </motion.div>
+          ))}
+        </div>
     </div>
   );
 }

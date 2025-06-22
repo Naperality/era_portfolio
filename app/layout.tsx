@@ -47,8 +47,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="bg-gradient-theme text-gray-900 flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow w-full px-2 pt-24 pb-20 bg-transparent">
-          <div className="max-w-screen-2xl mx-auto">
+        <main className="flex-grow w-full bg-transparent pt-24">
+          <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
             {children}
           </div>
         </main>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function ContactPage() {
   const [fading, setFading] = useState(false);
@@ -11,43 +12,59 @@ export default function ContactPage() {
     setFading(true);
     setTimeout(() => {
       router.push("/");
-    }, 600); // Match fade duration
-  }
+    }, 600);
+  };
 
   return (
-    <div className={`max-w-2xl mx-auto px-4 py-16 ${fading ? "animate-fade-out" : "animate-fade-in"}`}>
-      <button
-        onClick={handleBack}
-        className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition"
+    <section className={`relative min-h-screen px-6 py-16 ${fading ? "animate-fade-out" : "animate-fade-in"}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: fading ? 0 : 1, y: fading ? -20 : 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-3xl mx-auto space-y-10"
       >
-        ← Back to Home
-      </button>
+        {/* Back Button */}
+        <button
+          onClick={handleBack}
+          className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition shadow"
+        >
+          ← Back to Home
+        </button>
 
-      <h1 className="text-4xl font-bold mb-6 text-center">Contact</h1>
-      <p className="text-lg mb-8 text-center">
-        For commissions, collaborations, or general inquiries, feel free to reach out!
-      </p>
+        {/* Title & Description */}
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-400 to-purple-500 font-serif">
+            Let’s Connect
+          </h1>
+          <p className="text-lg text-gray-700 mt-2">
+            For commissions, collaborations, or just to say hi — send a message below.
+          </p>
+        </div>
 
-      <div className="space-y-4 text-center">
-        <p className="text-lg">
-          📧 Email: <a href="mailto:eraedevi@gmail.com" className="text-blue-600 hover:underline">eraedevi@gmail.com</a>
-        </p>
-        <p className="text-lg">
-          📱 Phone:{" "}
-          <a href="tel:09618163997" className="text-blue-600 hover:underline">
-            0961 816 3997
-          </a>
-        </p>
-        {/* <p className="text-lg">
-          📸 Instagram: <a href="https://instagram.com/" className="text-blue-600 hover:underline" target="_blank">instagram.com/yourprofile</a>
-        </p>
-        <p className="text-lg">
-          🎨 ArtStation: <a href="https://artstation.com/" className="text-blue-600 hover:underline" target="_blank">artstation.com/yourprofile</a>
-        </p>
-        <p className="text-lg">
-          📹 YouTube: <a href="https://youtube.com/" className="text-blue-600 hover:underline" target="_blank">youtube.com/yourchannel</a>
-        </p> */}
-      </div>
-    </div>
+        
+
+        {/* Direct Email + Socials */}
+        <div className="text-center mt-8 space-y-4">
+          <p className="text-lg text-gray-800">
+            Or email directly:{" "}
+            <a href="mailto:eraedevi@gmail.com" className="text-blue-600 hover:underline">
+              eraedevi@gmail.com
+            </a>
+          </p>
+
+          <div className="flex justify-center gap-6 text-lg">
+            <a href="https://www.artstation.com/" target="_blank" className="text-blue-700 hover:underline">
+              🎨 ArtStation
+            </a>
+            <a href="https://www.fiverr.com/" target="_blank" className="text-green-600 hover:underline">
+              💼 Fiverr
+            </a>
+            <a href="https://www.upwork.com/" target="_blank" className="text-emerald-600 hover:underline">
+              🌐 Upwork
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </section>
   );
 }
