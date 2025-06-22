@@ -41,7 +41,58 @@ export default function ContactPage() {
           </p>
         </div>
 
-        
+        {/* Contact Form */}
+        <form
+          action="https://formspree.io/f/xgvynwjv"
+          method="POST"
+          onSubmit={(e) => {
+            setTimeout(() => {
+              (e.target as HTMLFormElement).reset();
+            }, 100);
+          }}
+          className="space-y-6 bg-white/70 backdrop-blur-sm p-8 rounded-xl shadow-md"
+        >
+          <div>
+            <label className="block mb-1 text-gray-800 font-medium">Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your name"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-gray-800 font-medium">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@email.com"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-gray-800 font-medium">Message</label>
+            <textarea
+              name="message"
+              placeholder="Write your message..."
+              rows={5}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
+            />
+          </div>
+
+          {/* Optional: reCAPTCHA support */}
+          {/* <input type="hidden" name="_captcha" value="false" /> */}
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full hover:from-pink-600 hover:to-purple-600 shadow-lg transition"
+          >
+            Send Message
+          </button>
+        </form>
 
         {/* Direct Email + Socials */}
         <div className="text-center mt-8 space-y-4">
