@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 export const metadata = {
   title: "Eirah Art",
   description: "A collection of background illustrations and character designs by Era.",
-  keywords: ["Era", "portfolio", "background artist", "character design", "digital art", "Eirah Art", "Eirah Art Portofolio"],
+  keywords: ["Era", "portfolio", "background artist", "character design", "digital art", "Eirah Art", "Eirah Art Portfolio"],
   authors: [{ name: "Era" }],
   icons: {
     icon: [
@@ -44,10 +44,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-gradient-theme text-gray-900 flex flex-col min-h-screen">
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-gradient-to-br from-black via-gray-900 to-gray-800 text-gray-200 font-sans flex flex-col min-h-screen selection:bg-cyan-500 selection:text-black">
         <Navbar />
-        <main className="flex-grow w-full bg-transparent pt-24">
+        <main className="flex-grow w-full pt-24">
           <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
             {children}
           </div>

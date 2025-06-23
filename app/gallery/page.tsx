@@ -15,49 +15,73 @@ export default function GalleryPage() {
     setFading(true);
     setTimeout(() => {
       router.push("/");
-    }, 600); // Match fade duration
+    }, 600);
   };
-return (
-    <div className={`space-y-6 ${fading ? "animate-fade-out" : "animate-fade-in"}`}>
+
+  return (
+    <div
+      className={`min-h-screen px-6 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white space-y-10 ${
+        fading ? "animate-fade-out" : "animate-fade-in"
+      }`}
+    >
+      {/* Back Button */}
       <button
         onClick={handleBack}
-        className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition"
+        className="px-6 py-2 bg-cyan-600 text-white rounded-full hover:bg-cyan-700 transition shadow font-mono uppercase tracking-wide"
       >
         ← Back to Home
       </button>
 
+      {/* Artwork Gallery */}
+      <div className="text-center space-y-2">
+        <h2 className="text-3xl md:text-4xl font-bold font-mono tracking-wider text-cyan-400 uppercase">
+          Artworks
+        </h2>
+        <p className="text-gray-400">Selected digital illustrations</p>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {artworks.map((src, index) => (
-          <div
+          <motion.div
             key={index}
-            className="overflow-hidden rounded-2xl shadow hover:shadow-lg transition"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: fading ? 0 : 1, scale: fading ? 0.95 : 1 }}
+            transition={{ duration: 0.6 }}
+            className="overflow-hidden rounded-xl shadow-lg border border-cyan-600 bg-black/20 backdrop-blur"
           >
             <img
               src={src}
               alt={`Artwork ${index + 1}`}
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {/* Video Gallery */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {videos.map((src, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: fading ? 0 : 1, scale: fading ? 0.95 : 1 }}
-              transition={{ duration: 0.6 }}
-              className="rounded-2xl overflow-hidden shadow-xl bg-white/70 backdrop-blur-sm"
-            >
-              <video controls className="w-full h-full">
-                <source src={src} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </motion.div>
-          ))}
-        </div>
+      <div className="text-center space-y-2 mt-12">
+        <h2 className="text-3xl md:text-4xl font-bold font-mono tracking-wider text-indigo-400 uppercase">
+          Timelapse Videos
+        </h2>
+        <p className="text-gray-400">Watch the creative process in action</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {videos.map((src, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: fading ? 0 : 1, y: fading ? 10 : 0 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-xl overflow-hidden shadow-xl border border-indigo-600 bg-black/30 backdrop-blur"
+          >
+            <video controls className="w-full h-full">
+              <source src={src} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

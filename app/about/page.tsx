@@ -16,7 +16,9 @@ export default function AboutPage() {
   };
 
   return (
-    <section className={`relative min-h-screen px-6 py-16 ${fading ? "animate-fade-out" : "animate-fade-in"}`}>
+    <section className={`relative min-h-screen px-6 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white ${
+      fading ? "animate-fade-out" : "animate-fade-in"
+    }`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: fading ? 0 : 1, y: fading ? -20 : 0 }}
@@ -26,66 +28,70 @@ export default function AboutPage() {
         {/* Back Button */}
         <button
           onClick={handleBack}
-          className="px-4 py-2 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition shadow"
+          className="px-6 py-2 bg-cyan-600 text-white rounded-full hover:bg-cyan-700 transition font-mono uppercase tracking-wide shadow-lg"
         >
           ← Back to Home
         </button>
 
         {/* Header */}
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-400 to-purple-600 font-serif">
+        <h1 className="text-4xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 font-mono uppercase tracking-wider">
           About the Artist
         </h1>
 
         {/* Bio */}
-        <div className="text-lg text-gray-800 space-y-6 leading-relaxed font-light">
+        <div className="text-base md:text-lg text-gray-300 space-y-6 leading-relaxed font-light">
           <p>
-            Hello! I’m <strong className="font-semibold text-gray-900">Era</strong>, a digital artist who finds joy in painting tranquil landscapes,
-            whimsical characters, and the stories they tell. I’m deeply inspired by animated films, cozy games, and the subtle beauty of everyday life.
+            Hello! I’m <strong className="text-white font-semibold">Era</strong>, a digital artist passionate about crafting tranquil landscapes,
+            whimsical characters, and immersive storytelling through visuals. Inspired by animated films, cozy games, and everyday beauty,
+            I blend softness and imagination into each piece.
           </p>
 
           <p>
-            My favorite tools are <strong className="font-medium">Photoshop</strong> and <strong className="font-medium">Clip Studio Paint</strong>.
-            I enjoy crafting both dreamy backgrounds and expressive character designs — often blending soft colors, gentle lighting, and layered textures.
+            My go-to tools are <strong className="text-cyan-300">Photoshop</strong> and <strong className="text-cyan-300">Clip Studio Paint</strong>.
+            From serene backgrounds to expressive characters, my workflow involves subtle textures, soft light, and storytelling layers.
           </p>
 
           <p>
-            I hope that my art resonates with you, sparks a feeling, or even inspires a story of your own. Thank you for visiting and supporting my creative journey!
+            I hope my art resonates with you, sparks a feeling, or inspires your own worldbuilding journey. Thanks for stopping by and supporting my passion!
           </p>
         </div>
 
-        {/* Timeline / Highlights */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 border-b border-gray-300 pb-2">
+        {/* Timeline */}
+        <div className="space-y-4 mt-10">
+          <h2 className="text-2xl font-bold text-cyan-400 border-b border-cyan-700 pb-2 font-mono uppercase">
             Highlights & Journey
           </h2>
-          <ul className="space-y-3 text-gray-800">
-            <li className="flex gap-3">
-              <span className="font-semibold text-pink-600">2025</span>
-              <span>Graduated "Cum Laude" – BS in Computer Engineering, <strong>University of University of Cebu Main Campus</strong></span>
+          <ul className="space-y-3 text-gray-300 text-sm md:text-base">
+            <li className="flex gap-4">
+              <span className="font-semibold text-cyan-400 font-mono">2025</span>
+              <span>
+                Graduated <em>“Cum Laude”</em> — BS in Computer Engineering,
+                <strong> University of Cebu Main Campus</strong>
+              </span>
             </li>
-            <li className="flex gap-3">
-              <span className="font-semibold text-pink-600">2024</span>
-              <span>Created a personal portfolio to showcase original art and timelapses</span>
+            <li className="flex gap-4">
+              <span className="font-semibold text-cyan-400 font-mono">2024</span>
+              <span>Launched personal portfolio showcasing original art & timelapses</span>
             </li>
-            <li className="flex gap-3">
-              <span className="font-semibold text-pink-600">2018</span>
-              <span>Began creating digital illustrations using <strong>Adobe Photoshop</strong></span>
+            <li className="flex gap-4">
+              <span className="font-semibold text-cyan-400 font-mono">2018</span>
+              <span>Started digital illustration using <strong>Adobe Photoshop</strong></span>
             </li>
-            <li className="flex gap-3">
-              <span className="font-semibold text-pink-600">2017</span>
-              <span>Explored <strong>Clip Studio Paint</strong> and started developing a consistent art style</span>
+            <li className="flex gap-4">
+              <span className="font-semibold text-cyan-400 font-mono">2017</span>
+              <span>Explored <strong>Clip Studio Paint</strong> and developed a unique art style</span>
             </li>
           </ul>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center pt-10">
-          <p className="text-lg text-gray-800 mb-4">
-            Interested in working together or commissioning a piece?
+        {/* CTA */}
+        <div className="text-center pt-12">
+          <p className="text-lg text-gray-300 mb-4">
+            Curious about collaborating or requesting a piece?
           </p>
           <a
             href="/contact"
-            className="inline-block px-6 py-3 text-white text-lg bg-gradient-to-r from-pink-500 to-purple-500 rounded-full hover:from-pink-600 hover:to-purple-600 shadow-md transition"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white rounded-full text-lg shadow-lg hover:from-cyan-600 hover:to-indigo-700 transition font-mono uppercase tracking-wide"
           >
             Let’s Chat →
           </a>
