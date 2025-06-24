@@ -17,31 +17,63 @@ export default function ContactPage() {
 
   return (
     <section
-      className={`relative min-h-screen px-6 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-gray-200 ${
+      className={`relative min-h-screen px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-gray-200 ${
         fading ? "animate-fade-out" : "animate-fade-in"
       }`}
     >
+      {/* Floating Particles */}
+      <motion.div
+        className="absolute inset-0 z-0 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.06 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="absolute w-full h-full overflow-hidden">
+          {[...Array(35)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+              initial={{
+                x: Math.random() * 100 + "%",
+                y: Math.random() * 100 + "%",
+                opacity: 0,
+              }}
+              animate={{
+                y: "-10%",
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: Math.random() * 6 + 4,
+                delay: Math.random() * 4,
+              }}
+            />
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Main Content */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: fading ? 0 : 1, y: fading ? -20 : 0 }}
         transition={{ duration: 0.6 }}
-        className="max-w-3xl mx-auto space-y-10"
+        className="relative z-10 max-w-3xl mx-auto space-y-10"
       >
         {/* Back Button */}
         <button
           onClick={handleBack}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-md uppercase tracking-wide font-mono"
+          className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition shadow-md uppercase tracking-wide font-mono text-sm sm:text-base"
         >
           ← Back to Home
         </button>
 
-        {/* Title & Description */}
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 font-mono uppercase">
+        {/* Title */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 font-mono uppercase">
             Contact the Artist
           </h1>
-          <p className="text-md md:text-lg text-gray-400 mt-3">
-            Got a project, collaboration idea, or job opportunity? Drop a message!
+          <p className="text-sm sm:text-base text-gray-400">
+            Have a project or opportunity? Reach out — Eirah would love to hear from you.
           </p>
         </div>
 
@@ -54,10 +86,10 @@ export default function ContactPage() {
               (e.target as HTMLFormElement).reset();
             }, 100);
           }}
-          className="space-y-6 bg-white/5 backdrop-blur-md p-8 rounded-xl border border-indigo-600 shadow-md"
+          className="space-y-6 bg-white/5 backdrop-blur-md p-6 sm:p-8 rounded-xl border border-indigo-600 shadow-md"
         >
           <div>
-            <label className="block mb-1 text-cyan-300 font-mono text-sm uppercase tracking-wide">
+            <label className="block mb-1 text-cyan-300 font-mono text-xs uppercase tracking-widest">
               Name
             </label>
             <input
@@ -69,7 +101,7 @@ export default function ContactPage() {
             />
           </div>
           <div>
-            <label className="block mb-1 text-cyan-300 font-mono text-sm uppercase tracking-wide">
+            <label className="block mb-1 text-cyan-300 font-mono text-xs uppercase tracking-widest">
               Email
             </label>
             <input
@@ -81,7 +113,7 @@ export default function ContactPage() {
             />
           </div>
           <div>
-            <label className="block mb-1 text-cyan-300 font-mono text-sm uppercase tracking-wide">
+            <label className="block mb-1 text-cyan-300 font-mono text-xs uppercase tracking-widest">
               Message
             </label>
             <textarea
@@ -95,22 +127,22 @@ export default function ContactPage() {
 
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white rounded-full hover:from-cyan-600 hover:to-indigo-700 shadow-lg uppercase tracking-wider transition"
+            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white rounded-full hover:from-cyan-600 hover:to-indigo-700 shadow-lg uppercase tracking-wide text-sm sm:text-base font-mono"
           >
             Send Message
           </button>
         </form>
 
-        {/* Direct Email + Socials */}
+        {/* Email + Socials */}
         <div className="text-center mt-8 space-y-4">
-          <p className="text-lg text-gray-300">
-            Or email directly:{" "}
+          <p className="text-sm sm:text-base text-gray-300">
+            Or reach directly via:{" "}
             <a href="mailto:eraedevi@gmail.com" className="text-cyan-400 hover:underline">
               eraedevi@gmail.com
             </a>
           </p>
 
-          <div className="flex justify-center gap-6 text-sm font-mono uppercase tracking-wide">
+          <div className="flex justify-center gap-6 text-xs sm:text-sm font-mono uppercase tracking-wide">
             <a
               href="https://www.artstation.com/"
               target="_blank"
