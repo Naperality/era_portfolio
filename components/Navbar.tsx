@@ -10,8 +10,6 @@ import {
   BrushIcon,
   ChevronLeft,
   ChevronRight,
-  Menu,
-  X
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
@@ -36,7 +34,7 @@ export default function Navbar() {
       if (!scrollRef.current) return;
       const isOverflowing =
         scrollRef.current.scrollWidth > scrollRef.current.clientWidth;
-      const isMobile = window.innerWidth < 768; // Only check on mobile
+      const isMobile = window.innerWidth < 768;
       setShowArrows(isOverflowing && isMobile);
     };
 
@@ -55,83 +53,92 @@ export default function Navbar() {
     }
   };
 
+  // Toggle sidebar
+  const handleToggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   return (
     <>
-    <nav className="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md border-b border-cyan-600 shadow-md z-[60] py-4">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        {/* Left: Menu + Logo */}
-        <div className="flex items-center gap-3">
-          <AnimatedBurger isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
-          <Link
-            href="/"
-            className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition inline-flex items-center gap-1"
-          >
-            <BrushIcon className="w-5 h-5" />
-            Eirah Art
-          </Link>
-        </div>
-
-        {/* Right: Scrollable Links + Arrows */}
-        <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-          {/* Left Arrow */}
-          {showArrows && (
-            <button
-              onClick={() => scroll("left")}
-              className="p-1 text-cyan-300 hover:text-white transition shrink-0"
+      <nav className="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md border-b border-cyan-600 shadow-md z-[60] py-4">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+          {/* Left: Menu + Logo */}
+          <div className="flex items-center gap-3">
+            <AnimatedBurger
+              key={isOpen.toString()} // optional: force rerender for animation sync
+              isOpen={isOpen}
+              toggle={handleToggleSidebar}
+            />
+            <Link
+              href="/"
+              className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition inline-flex items-center gap-1"
             >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-          )}
-
-          {/* Scrollable Links */}
-          <div
-            ref={scrollRef}
-            className="flex gap-2 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide whitespace-nowrap shrink min-w-0"
-            style={{
-              maxWidth: "calc(100vw - 200px)", // Adjust width if needed
-            }}
-          >
-            {links.map(({ href, label, icon: Icon }) => {
-              const isActive = pathname === href;
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  ref={isActive ? (el) => {
-                    if (el && scrollRef.current) {
-                      el.scrollIntoView({
-                        behavior: "smooth",
-                        block: "nearest",
-                        inline: "center"
-                      });
-                    }
-                  } : undefined}
-                  className={`inline-flex items-center gap-1 px-3 py-1 rounded-md transition ${
-                    isActive
-                      ? "text-white bg-cyan-600/80"
-                      : "text-cyan-300 hover:text-white"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </Link>
-              );
-            })}
+              <BrushIcon className="w-5 h-5" />
+              Eirah Art
+            </Link>
           </div>
 
-          {/* Right Arrow */}
-          {showArrows && (
-            <button
-              onClick={() => scroll("right")}
-              className="p-1 text-cyan-300 hover:text-white transition shrink-0"
+          {/* Right: Scrollable Links + Arrows */}
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+            {showArrows && (
+              <button
+                onClick={() => scroll("left")}
+                className="p-1 text-cyan-300 hover:text-white transition shrink-0"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+
+            <div
+              ref={scrollRef}
+              className="flex gap-2 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide whitespace-nowrap shrink min-w-0"
+              style={{ maxWidth: "calc(100vw - 200px)" }}
             >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          )}
+              {links.map(({ href, label, icon: Icon }) => {
+                const isActive = pathname === href;
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    ref={
+                      isActive
+                        ? (el) => {
+                            if (el && scrollRef.current) {
+                              el.scrollIntoView({
+                                behavior: "smooth",
+                                inline: "center",
+                              });
+                            }
+                          }
+                        : undefined
+                    }
+                    className={`inline-flex items-center gap-1 px-3 py-1 rounded-md transition ${
+                      isActive
+                        ? "text-white bg-cyan-600/80"
+                        : "text-cyan-300 hover:text-white"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {showArrows && (
+              <button
+                onClick={() => scroll("right")}
+                className="p-1 text-cyan-300 hover:text-white transition shrink-0"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
-    <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      </nav>
+
+      {/* Sidebar (controlled by isOpen) */}
+      <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }
