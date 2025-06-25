@@ -10,10 +10,15 @@ import {
   BrushIcon,
   ChevronLeft,
   ChevronRight,
+  Menu,
+  X
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Sidebar from "./Sidebar";
+import AnimatedBurger from "./AnimatedBurger";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showArrows, setShowArrows] = useState(false);
@@ -51,21 +56,23 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md border-b border-cyan-600 shadow-md z-50 py-4">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition"
-        >
-          <span className="inline-flex items-center gap-1">
+    <>
+    <nav className="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md border-b border-cyan-600 shadow-md z-[60] py-4">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+        {/* Left: Menu + Logo */}
+        <div className="flex items-center gap-3">
+          <AnimatedBurger isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
+          <Link
+            href="/"
+            className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition inline-flex items-center gap-1"
+          >
             <BrushIcon className="w-5 h-5" />
             Eirah Art
-          </span>
-        </Link>
+          </Link>
+        </div>
 
-        {/* Nav Links + Optional Arrows */}
-        <div className="flex items-center gap-1 sm:gap-2 ml-2 min-w-0">
+        {/* Right: Scrollable Links + Arrows */}
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0">
           {/* Left Arrow */}
           {showArrows && (
             <button
@@ -81,7 +88,7 @@ export default function Navbar() {
             ref={scrollRef}
             className="flex gap-2 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide whitespace-nowrap shrink min-w-0"
             style={{
-              maxWidth: "calc(100vw - 120px)", // Leaves room for arrows on tiny screens
+              maxWidth: "calc(100vw - 200px)", // Adjust width if needed
             }}
           >
             {links.map(({ href, label, icon: Icon }) => {
@@ -90,6 +97,15 @@ export default function Navbar() {
                 <Link
                   key={href}
                   href={href}
+                  ref={isActive ? (el) => {
+                    if (el && scrollRef.current) {
+                      el.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center"
+                      });
+                    }
+                  } : undefined}
                   className={`inline-flex items-center gap-1 px-3 py-1 rounded-md transition ${
                     isActive
                       ? "text-white bg-cyan-600/80"
@@ -115,5 +131,7 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+    </>
   );
 }
