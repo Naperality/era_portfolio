@@ -1,44 +1,31 @@
 'use client'
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useInView } from "framer-motion";
+import { fetchGalleryItems } from "@/lib/fetchGalleryItems";
 
-const characterArt = ["/images/art1.jpg"];
-const backgroundArt = ["/images/art2.jpg"];
-const fanart = ["/images/art3.jpg"];
-const sampleCommissions = ["/images/art1.jpg", "/images/art2.jpg"];
-const model3D = ["/images/art3.jpg"];
-const asset3D = ["/images/art2.jpg"];
-const timelapseVideos = ["/videos/video1.mp4", "/videos/video2.mp4"];
+type GalleryItem = {
+  id: string;
+  title: string;
+  category: string;
+  mediaType: "image" | "video";
+  url: string;
+  description?: string;
+  publishedAt?: string;
+};
 
 export default function GalleryPage() {
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [fading, setFading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const checkScrollToHash = () => {
-      const hash = window.location.hash;
-
-      if (sessionStorage.getItem("skipFade") === "true") {
-        sessionStorage.removeItem("skipFade");
-        setFading(false);
-      }
-
-      if (hash) {
-        const target = document.querySelector(hash);
-        if (target) {
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 100);
-        }
-      }
-    };
-
-    checkScrollToHash();
-    window.addEventListener("hashchange", checkScrollToHash);
-    return () => window.removeEventListener("hashchange", checkScrollToHash);
+    fetchGalleryItems().then(setGallery);
   }, []);
+
+  const groupByCategory = (category: string) =>
+    gallery.filter((item) => item.category === category);
 
   const handleBack = () => {
     setFading(true);
@@ -57,7 +44,7 @@ export default function GalleryPage() {
     id: string;
     title: string;
     color: string;
-    items: string[];
+    items: GalleryItem[];
     type?: "image" | "video";
   }) => {
     const ref = useRef(null);
@@ -83,40 +70,46 @@ export default function GalleryPage() {
             type === "image" ? "sm:grid-cols-2 md:grid-cols-3" : "md:grid-cols-2"
           } gap-6`}
         >
-          {items.map((src, index) =>
-            type === "image" ? (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="overflow-hidden rounded-xl shadow-lg border border-cyan-600 bg-black/20 backdrop-blur"
-              >
+          {items.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className={`overflow-hidden rounded-xl shadow-lg border ${
+                item.mediaType === "image" ? "border-cyan-600" : "border-indigo-600"
+              } bg-black/20 backdrop-blur`}
+            >
+              {item.mediaType === "image" ? (
                 <img
                   loading="lazy"
-                  src={src}
-                  alt={`${title} ${index + 1}`}
+                  src={item.url}
+                  alt={item.title}
                   className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
                 />
-              </motion.div>
-            ) : (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 10 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="rounded-xl overflow-hidden shadow-xl border border-indigo-600 bg-black/30 backdrop-blur"
-              >
+              ) : (
                 <video
                   controls
                   className="w-full h-full object-contain max-h-[400px] sm:max-h-[500px]"
                 >
-                  <source src={src} type="video/mp4" />
+                  <source src={item.url} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-              </motion.div>
-            )
-          )}
+              )}
+
+              <div className="p-4 space-y-1 text-white">
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                {item.description && (
+                  <p className="text-sm text-gray-300">{item.description}</p>
+                )}
+                {item.publishedAt && (
+                  <p className="text-xs text-gray-400">
+                    {new Date(item.publishedAt).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.section>
     );
@@ -135,13 +128,13 @@ export default function GalleryPage() {
         ← Back to Home
       </button>
 
-      <Section id="character" title="2D – Character" color="text-cyan-400" items={characterArt} />
-      <Section id="background" title="2D – Background" color="text-cyan-400" items={backgroundArt} />
-      <Section id="fanart" title="2D – Fanart" color="text-cyan-400" items={fanart} />
-      <Section id="sample-commission" title="2D – Sample Commission" color="text-cyan-400" items={sampleCommissions} />
-      <Section id="model" title="3D – Model" color="text-indigo-400" items={model3D} />
-      <Section id="asset" title="3D – Asset" color="text-indigo-400" items={asset3D} />
-      <Section id="timelapse" title="Timelapse Videos" color="text-pink-400" items={timelapseVideos} type="video" />
+      <Section id="character" title="2D – Character" color="text-cyan-400" items={groupByCategory("characterArt")} />
+      <Section id="background" title="2D – Background" color="text-cyan-400" items={groupByCategory("backgroundArt")} />
+      <Section id="fanart" title="2D – Fanart" color="text-cyan-400" items={groupByCategory("fanart")} />
+      <Section id="sample-commission" title="2D – Sample Commission" color="text-cyan-400" items={groupByCategory("sampleCommissions")} />
+      <Section id="model" title="3D – Model" color="text-indigo-400" items={groupByCategory("model3D")} />
+      <Section id="asset" title="3D – Asset" color="text-indigo-400" items={groupByCategory("asset3D")} />
+      <Section id="timelapse" title="Timelapse Videos" color="text-pink-400" items={groupByCategory("timelapseVideos")} type="video" />
     </section>
   );
 }

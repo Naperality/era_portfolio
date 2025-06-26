@@ -1,12 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
+type Particle = {
+  x: string;
+  y: string;
+  duration: number;
+  delay: number;
+};
+
 export default function Home() {
   const [fading, setFading] = useState(false);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    // Generate particle data only on client side
+    const generatedParticles = Array.from({ length: 50 }, () => ({
+      x: `${Math.random() * 100}%`,
+      y: `${Math.random() * 100}%`,
+      duration: Math.random() * 5 + 5,
+      delay: Math.random() * 5,
+    }));
+    setParticles(generatedParticles);
+  }, []);
 
   const handleFadeOut = (path: string) => {
     setFading(true);
@@ -17,7 +36,7 @@ export default function Home() {
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 py-12 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
-      
+
       {/* Floating Particles */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
@@ -26,23 +45,16 @@ export default function Home() {
         transition={{ duration: 1 }}
       >
         <div className="absolute w-full h-full overflow-hidden">
-          {[...Array(50)].map((_, i) => (
+          {particles.map((p, i) => (
             <motion.div
               key={i}
               className="absolute w-1 h-1 bg-cyan-300 rounded-full"
-              initial={{
-                x: Math.random() * 100 + "%",
-                y: Math.random() * 100 + "%",
-                opacity: 0,
-              }}
-              animate={{
-                y: "-10%",
-                opacity: [0, 1, 0],
-              }}
+              initial={{ x: p.x, y: p.y, opacity: 0 }}
+              animate={{ y: "-10%", opacity: [0, 1, 0] }}
               transition={{
                 repeat: Infinity,
-                duration: Math.random() * 5 + 5,
-                delay: Math.random() * 5,
+                duration: p.duration,
+                delay: p.delay,
               }}
             />
           ))}
