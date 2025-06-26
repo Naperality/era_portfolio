@@ -28,7 +28,7 @@ export default function Navbar() {
     { href: "/contact", label: "Contact", icon: MailIcon },
   ];
 
-  // Check if nav is overflowing on smaller screens
+  // Detect overflow to show scroll arrows
   useEffect(() => {
     const checkOverflow = () => {
       if (!scrollRef.current) return;
@@ -43,6 +43,27 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", checkOverflow);
   }, []);
 
+  // Center the active link on mount and route change
+  useEffect(() => {
+    const activeLink = scrollRef.current?.querySelector('[data-active="true"]');
+    if (activeLink && scrollRef.current) {
+      const container = scrollRef.current;
+      const linkRect = (activeLink as HTMLElement).getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      const offset =
+        linkRect.left -
+        containerRect.left -
+        container.clientWidth / 2 +
+        linkRect.width / 2;
+
+      container.scrollBy({
+        left: offset,
+        behavior: "smooth",
+      });
+    }
+  }, [pathname]);
+
   const scroll = (direction: "left" | "right") => {
     const scrollAmount = 120;
     if (scrollRef.current) {
@@ -53,7 +74,6 @@ export default function Navbar() {
     }
   };
 
-  // Toggle sidebar
   const handleToggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
@@ -65,13 +85,13 @@ export default function Navbar() {
           {/* Left: Menu + Logo */}
           <div className="flex items-center gap-3">
             <AnimatedBurger
-              key={isOpen.toString()} // optional: force rerender for animation sync
+              key={isOpen.toString()}
               isOpen={isOpen}
               toggle={handleToggleSidebar}
             />
             <Link
               href="/"
-              className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-widest uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition inline-flex items-center gap-1"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold tracking-wide uppercase text-cyan-400 font-mono whitespace-nowrap hover:text-white transition inline-flex items-center gap-1"
             >
               <BrushIcon className="w-5 h-5" />
               Eirah Art
@@ -100,26 +120,15 @@ export default function Navbar() {
                   <Link
                     key={href}
                     href={href}
-                    ref={
-                      isActive
-                        ? (el) => {
-                            if (el && scrollRef.current) {
-                              el.scrollIntoView({
-                                behavior: "smooth",
-                                inline: "center",
-                              });
-                            }
-                          }
-                        : undefined
-                    }
+                    data-active={isActive}
                     className={`inline-flex items-center gap-1 px-3 py-1 rounded-md transition ${
                       isActive
                         ? "text-white bg-cyan-600/80"
                         : "text-cyan-300 hover:text-white"
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    {label}
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="text-sm sm:text-base">{label}</span>
                   </Link>
                 );
               })}
