@@ -1,9 +1,10 @@
 'use client'
+export const dynamic = 'force-dynamic'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 
-export default function StudioLoginPage() {
+function StudioLoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
@@ -42,5 +43,13 @@ export default function StudioLoginPage() {
         </button>
       </form>
     </div>
+  )
+}
+
+export default function StudioLoginPage() {
+  return (
+    <Suspense fallback={<div className="text-center text-white mt-10">Loading login...</div>}>
+      <StudioLoginForm />
+    </Suspense>
   )
 }
