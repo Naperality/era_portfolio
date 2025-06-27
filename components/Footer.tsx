@@ -1,6 +1,6 @@
 "use client";
 
-import { MailIcon, ArrowUpCircle } from "lucide-react";
+import { MailIcon, ArrowUpCircle, LockKeyhole } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Footer() {
@@ -11,7 +11,6 @@ export default function Footer() {
   return (
     <footer className="relative bg-black/50 backdrop-blur-md border-t border-cyan-600 mt-16 px-6 py-8">
       <div className="max-w-6xl mx-auto flex flex-col gap-4 text-center md:text-left text-cyan-300 text-sm font-mono tracking-widest md:flex-row md:items-center md:justify-between">
-        
         {/* Left: Contact + Copyright */}
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
           <div className="flex items-center gap-2">
@@ -26,7 +25,7 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Right: Back to Top with icon animation */}
+        {/* Right: Back to Top */}
         <button
           onClick={scrollToTop}
           className="inline-flex items-center gap-1 justify-center hover:text-white transition"
@@ -39,6 +38,19 @@ export default function Footer() {
           </motion.span>
           Back to Top
         </button>
+      </div>
+
+      {/* Bottom-right Studio Link */}
+      <div className="absolute bottom-2 right-4">
+        <a
+          href="https://eirah-gallery.vercel.app/studio-login?redirect=%2Fstudio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-cyan-500 hover:text-white opacity-60 hover:opacity-100 transition"
+          title="Studio Login"
+        >
+          <LockKeyhole className="w-4 h-4" />
+        </a>
       </div>
     </footer>
   );
