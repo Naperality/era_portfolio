@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Eirah Art",
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </div>
         </main>
+        <ScrollToTopButton />
         <Footer />
       </body>
     </html>

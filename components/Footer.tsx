@@ -25,7 +25,7 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Right: Back to Top */}
+        {/* Right: Back to Top
         <button
           onClick={scrollToTop}
           className="inline-flex items-center gap-1 justify-center hover:text-white transition"
@@ -37,7 +37,7 @@ export default function Footer() {
             <ArrowUpCircle className="w-4 h-4" />
           </motion.span>
           Back to Top
-        </button>
+        </button> */}
       </div>
 
       {/* Bottom-right Studio Link */}
