@@ -4,6 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { fetchGalleryItems } from "@/lib/fetchGalleryItems";
+import {
+  Paintbrush,
+  Box,
+  User,
+  Image as ImageIcon,
+  Heart,
+  Package,
+  Shapes,
+  Video
+} from "lucide-react";
+
 
 type GalleryItem = {
   id: string;
@@ -14,6 +25,21 @@ type GalleryItem = {
   description?: string;
   publishedAt?: string;
 };
+
+const IconTitle = ({
+  icon: Icon,
+  text,
+  color,
+}: {
+  icon: React.ElementType;
+  text: string;
+  color: string;
+}) => (
+  <div className="flex items-center justify-center gap-2">
+    <Icon size={28} strokeWidth={2.2} className={color} />
+    <span>{text}</span>
+  </div>
+);
 
 export default function GalleryPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
@@ -37,12 +63,14 @@ export default function GalleryPage() {
   const Section = ({
     id,
     title,
+    icon,
     color,
     items,
     type = "image",
   }: {
     id: string;
     title: string;
+    icon: React.ElementType;
     color: string;
     items: GalleryItem[];
     type?: "image" | "video";
@@ -60,8 +88,10 @@ export default function GalleryPage() {
         className="scroll-mt-32 space-y-6"
       >
         <div className="text-center space-y-2">
-          <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-mono tracking-wider uppercase ${color}`}>
-            {title}
+          <h2
+            className={`flex items-center justify-center gap-2 text-2xl sm:text-3xl md:text-4xl font-bold font-mono tracking-wider uppercase ${color}`}
+          >
+            <IconTitle icon={icon} text={title} color={color} />
           </h2>
         </div>
 
@@ -77,7 +107,9 @@ export default function GalleryPage() {
               animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className={`overflow-hidden rounded-xl shadow-lg border ${
-                item.mediaType === "image" ? "border-cyan-600" : "border-indigo-600"
+                item.mediaType === "image"
+                  ? "border-cyan-600"
+                  : "border-indigo-600"
               } bg-black/20 backdrop-blur`}
             >
               {item.mediaType === "image" ? (
@@ -128,13 +160,68 @@ export default function GalleryPage() {
         ← Back to Home
       </button>
 
-      <Section id="character" title="2D – Character" color="text-cyan-400" items={groupByCategory("characterArt")} />
-      <Section id="background" title="2D – Background" color="text-cyan-400" items={groupByCategory("backgroundArt")} />
-      <Section id="fanart" title="2D – Fanart" color="text-cyan-400" items={groupByCategory("fanart")} />
-      <Section id="sample-commission" title="2D – Sample Commission" color="text-cyan-400" items={groupByCategory("sampleCommissions")} />
-      <Section id="model" title="3D – Model" color="text-indigo-400" items={groupByCategory("model3D")} />
-      <Section id="asset" title="3D – Asset" color="text-indigo-400" items={groupByCategory("asset3D")} />
-      <Section id="timelapse" title="Timelapse Videos" color="text-pink-400" items={groupByCategory("timelapseVideos")} type="video" />
+      {/* 2D Section Divider */}
+      <div
+        id="2D"
+        className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
+      >
+        <Paintbrush size={32} strokeWidth={2.5} className="text-cyan-400" />
+        2D Digital Art Section
+      </div>
+
+      <Section
+        id="character"
+        title="2D – Character"
+        icon={User}
+        color="text-cyan-400"
+        items={groupByCategory("characterArt")}
+      />
+      <Section
+        id="background"
+        title="2D – Background"
+        icon={ImageIcon}
+        color="text-cyan-400"
+        items={groupByCategory("backgroundArt")}
+      />
+      <Section
+        id="fanart"
+        title="2D – Fanart"
+        icon={Heart}
+        color="text-cyan-400"
+        items={groupByCategory("fanart")}
+      />
+
+      {/* 3D Section Divider */}
+      <div
+        id="3D"
+        className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
+      >
+        <Box size={32} strokeWidth={2.5} className="text-indigo-400" />
+        3D Digital Art Section
+      </div>
+
+      <Section
+        id="model"
+        title="3D – Model"
+        icon={Package}
+        color="text-indigo-400"
+        items={groupByCategory("model3D")}
+      />
+      <Section
+        id="asset"
+        title="3D – Asset"
+        icon={Shapes}
+        color="text-indigo-400"
+        items={groupByCategory("asset3D")}
+      />
+      <Section
+        id="timelapse"
+        title="Timelapse Videos"
+        icon={Video}
+        color="text-pink-400"
+        type="video"
+        items={groupByCategory("timelapseVideos")}
+      />
     </section>
   );
 }

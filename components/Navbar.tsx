@@ -65,7 +65,7 @@ export default function Navbar() {
   }, [pathname]);
 
   const scroll = (direction: "left" | "right") => {
-    const scrollAmount = 120;
+    const scrollAmount = 100;
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
