@@ -165,7 +165,7 @@ export default function GalleryPage() {
         id="2D"
         className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
       >
-        <Paintbrush size={32} strokeWidth={2.5} className="text-cyan-400" />
+        <Paintbrush strokeWidth={2.5} className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-cyan-400" />
         2D Digital Art Section
       </div>
 
@@ -191,12 +191,13 @@ export default function GalleryPage() {
         items={groupByCategory("fanart")}
       />
 
+      
       {/* 3D Section Divider */}
       <div
         id="3D"
         className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
       >
-        <Box size={32} strokeWidth={2.5} className="text-indigo-400" />
+        <Box strokeWidth={2.5} className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-indigo-400" />
         3D Digital Art Section
       </div>
 
