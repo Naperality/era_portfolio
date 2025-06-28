@@ -163,11 +163,15 @@ export default function GalleryPage() {
       {/* 2D Section Divider */}
       <div
         id="2D"
-        className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
+        className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
       >
-        <Paintbrush strokeWidth={2.5} className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-cyan-400" />
+        <Paintbrush
+          strokeWidth={2.5}
+          className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-cyan-400"
+        />
         2D Digital Art Section
       </div>
+
 
       <Section
         id="character"
@@ -195,11 +199,15 @@ export default function GalleryPage() {
       {/* 3D Section Divider */}
       <div
         id="3D"
-        className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
+        className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
       >
-        <Box strokeWidth={2.5} className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-indigo-400" />
+        <Box
+          strokeWidth={2.5}
+          className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-indigo-400"
+        />
         3D Digital Art Section
       </div>
+
 
       <Section
         id="model"
