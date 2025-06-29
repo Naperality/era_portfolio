@@ -99,7 +99,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         {/* 2D Section */}
         <div className="mb-6">
           <Link
-            href="/gallery#2D"
+            href="/gallery#section-2D"
             onClick={handleLinkClick}
             className={linkStyle("#2D", "text-cyan-400 text-base font-semibold")}
           >
@@ -121,7 +121,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         {/* 3D Section */}
         <div className="mb-6">
           <Link
-            href="/gallery#3D"
+            href="/gallery#section-3D"
             onClick={handleLinkClick}
             className={linkStyle("#3D", "text-cyan-400 text-base font-semibold")}
           >

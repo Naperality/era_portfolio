@@ -1,12 +1,12 @@
 # 🎨 Era's Art Portfolio
 
-A minimalist and elegant online portfolio designed for **Era**, an aspiring background illustration and character design artist. This site showcases her growing collection of original artworks, sketches, and time-lapse drawing videos. Built with ❤️ using **Next.js**, **Tailwind CSS**, and deployed via **Vercel**.
+A minimalist and elegant online portfolio designed for **Era**, an aspiring background illustration and character design artist. This site showcases her growing collection of original artworks, sketches, and time-lapse drawing videos. Built with ❤️ using **Next.js**, **Tailwind CSS**, deployed via **Vercel**, and used content management via **Sanity**.
 
 ---
 
 ## 🌐 Live Demo
 
-🔗 [View the Live Portfolio](https://era-portfolio-sigma.vercel.app/)
+🔗 [View the Live Portfolio](https://eirah-gallery.vercel.app/)
 
 ---
 
@@ -27,6 +27,7 @@ A minimalist and elegant online portfolio designed for **Era**, an aspiring back
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **Deployment:** [Vercel](https://vercel.com/)
 - **Version Control:** Git + GitHub
+- **Control Management (CMS):** [Sanity](https://sanity.io/)
 
 ---
 
@@ -42,6 +43,8 @@ era_portfolio/
 │   └── contact/          # Contact links or form
 ├── components/           # Reusable components (Navbar, Footer, etc.)
 ├── styles/               # Global and custom styles
+├── lib/                  # Gallery fetching sanity
+├── sanity/               # Sanity set up and schemas
 ├── tailwind.config.js    # Tailwind CSS configuration
 ├── README.md             # Project overview
 └── ...
@@ -55,7 +58,7 @@ To run this project locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Naperality/era_portfolio.git
+git clone https://github.com/Naperality/eirah_portfolio.git
 
 # Navigate into the project directory
 cd era_portfolio

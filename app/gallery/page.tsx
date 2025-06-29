@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion, useInView } from "framer-motion";
-import { fetchGalleryItems } from "@/lib/fetchGalleryItems";
+import { useEffect, useRef, useState } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { motion, useInView } from 'framer-motion';
+import { fetchGalleryItems } from '@/lib/fetchGalleryItems';
 import {
   Paintbrush,
   Box,
@@ -13,14 +13,13 @@ import {
   Package,
   Shapes,
   Video
-} from "lucide-react";
-
+} from 'lucide-react';
 
 type GalleryItem = {
   id: string;
   title: string;
   category: string;
-  mediaType: "image" | "video";
+  mediaType: 'image' | 'video';
   url: string;
   description?: string;
   publishedAt?: string;
@@ -29,7 +28,7 @@ type GalleryItem = {
 const IconTitle = ({
   icon: Icon,
   text,
-  color,
+  color
 }: {
   icon: React.ElementType;
   text: string;
@@ -43,12 +42,31 @@ const IconTitle = ({
 
 export default function GalleryPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [fading, setFading] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    fetchGalleryItems().then(setGallery);
+    fetchGalleryItems().then((items) => {
+      setGallery(items);
+      setLoading(false);
+    });
   }, []);
+
+  // Scroll to section hash AFTER content is loaded
+  useEffect(() => {
+    if (!loading && typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash) {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    }
+  }, [loading, pathname, searchParams]);
 
   const groupByCategory = (category: string) =>
     gallery.filter((item) => item.category === category);
@@ -56,7 +74,7 @@ export default function GalleryPage() {
   const handleBack = () => {
     setFading(true);
     setTimeout(() => {
-      router.push("/");
+      router.push('/');
     }, 600);
   };
 
@@ -66,17 +84,17 @@ export default function GalleryPage() {
     icon,
     color,
     items,
-    type = "image",
+    type = 'image'
   }: {
     id: string;
     title: string;
     icon: React.ElementType;
     color: string;
     items: GalleryItem[];
-    type?: "image" | "video";
+    type?: 'image' | 'video';
   }) => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, margin: '-100px' });
 
     return (
       <motion.section
@@ -84,7 +102,7 @@ export default function GalleryPage() {
         id={id}
         initial={{ opacity: 0, y: 40 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
         className="scroll-mt-32 space-y-6"
       >
         <div className="text-center space-y-2">
@@ -97,22 +115,25 @@ export default function GalleryPage() {
 
         <div
           className={`grid grid-cols-1 ${
-            type === "image" ? "sm:grid-cols-2 md:grid-cols-3" : "md:grid-cols-2"
+            type === 'image' ? 'sm:grid-cols-2 md:grid-cols-3' : 'md:grid-cols-2'
           } gap-6`}
         >
           {items.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
+              animate={{
+                opacity: isInView ? 1 : 0,
+                scale: isInView ? 1 : 0.95
+              }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className={`overflow-hidden rounded-xl shadow-lg border ${
-                item.mediaType === "image"
-                  ? "border-cyan-600"
-                  : "border-indigo-600"
+                item.mediaType === 'image'
+                  ? 'border-cyan-600'
+                  : 'border-indigo-600'
               } bg-black/20 backdrop-blur`}
             >
-              {item.mediaType === "image" ? (
+              {item.mediaType === 'image' ? (
                 <img
                   loading="lazy"
                   src={item.url}
@@ -150,7 +171,7 @@ export default function GalleryPage() {
   return (
     <section
       className={`min-h-screen px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white space-y-20 transition-opacity duration-500 ${
-        fading ? "opacity-0 pointer-events-none" : "opacity-100"
+        fading ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
       <button
@@ -162,7 +183,7 @@ export default function GalleryPage() {
 
       {/* 2D Section Divider */}
       <div
-        id="2D"
+        id="section-2D"
         className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
       >
         <Paintbrush
@@ -172,65 +193,70 @@ export default function GalleryPage() {
         2D Digital Art Section
       </div>
 
+      {loading ? (
+        <div className="text-center py-20 text-gray-400 font-mono text-lg animate-pulse">
+          Loading gallery...
+        </div>
+      ) : (
+        <>
+          <Section
+            id="character"
+            title="2D – Character"
+            icon={User}
+            color="text-cyan-400"
+            items={groupByCategory('characterArt')}
+          />
+          <Section
+            id="background"
+            title="2D – Background"
+            icon={ImageIcon}
+            color="text-cyan-400"
+            items={groupByCategory('backgroundArt')}
+          />
+          <Section
+            id="fanart"
+            title="2D – Fanart"
+            icon={Heart}
+            color="text-cyan-400"
+            items={groupByCategory('fanart')}
+          />
 
-      <Section
-        id="character"
-        title="2D – Character"
-        icon={User}
-        color="text-cyan-400"
-        items={groupByCategory("characterArt")}
-      />
-      <Section
-        id="background"
-        title="2D – Background"
-        icon={ImageIcon}
-        color="text-cyan-400"
-        items={groupByCategory("backgroundArt")}
-      />
-      <Section
-        id="fanart"
-        title="2D – Fanart"
-        icon={Heart}
-        color="text-cyan-400"
-        items={groupByCategory("fanart")}
-      />
+          {/* 3D Section Divider */}
+          <div
+            id="section-3D"
+            className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
+          >
+            <Box
+              strokeWidth={2.5}
+              className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-indigo-400"
+            />
+            3D Digital Art Section
+          </div>
 
-      
-      {/* 3D Section Divider */}
-      <div
-        id="3D"
-        className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
-      >
-        <Box
-          strokeWidth={2.5}
-          className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-indigo-400"
-        />
-        3D Digital Art Section
-      </div>
-
-
-      <Section
-        id="model"
-        title="3D – Model"
-        icon={Package}
-        color="text-indigo-400"
-        items={groupByCategory("model3D")}
-      />
-      <Section
-        id="asset"
-        title="3D – Asset"
-        icon={Shapes}
-        color="text-indigo-400"
-        items={groupByCategory("asset3D")}
-      />
-      <Section
-        id="timelapse"
-        title="Timelapse Videos"
-        icon={Video}
-        color="text-pink-400"
-        type="video"
-        items={groupByCategory("timelapseVideos")}
-      />
+          <Section
+            id="model"
+            title="3D – Model"
+            icon={Package}
+            color="text-indigo-400"
+            items={groupByCategory('model3D')}
+          />
+          <Section
+            id="asset"
+            title="3D – Asset"
+            icon={Shapes}
+            color="text-indigo-400"
+            items={groupByCategory('asset3D')}
+          />
+          <Section
+            id="timelapse"
+            title="Timelapse Videos"
+            icon={Video}
+            color="text-pink-400"
+            type="video"
+            items={groupByCategory('timelapseVideos')}
+          />
+        </>
+      )}
     </section>
   );
 }
