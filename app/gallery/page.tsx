@@ -81,8 +81,6 @@ export default function GalleryPage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [lightboxItems, setLightboxItems] = useState<any[]>([]);
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     fetchGalleryItems().then((items) => {
@@ -99,7 +97,7 @@ export default function GalleryPage() {
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-  }, [gallery, pathname, searchParams]);
+  }, [gallery]);
 
   const handleBack = () => {
     setFading(true);
@@ -257,51 +255,50 @@ export default function GalleryPage() {
   slides={lightboxItems}
   plugins={[VideoPlugin]}
   render={{
-  slide: ({ slide, rect }: { slide: ExtendedSlide; rect: any }) => {
-    const isVideo = slide.type === 'video';
+  slide: ({ slide, rect }) => {
+        const customSlide = slide as ExtendedSlide;
+        const isVideo = customSlide.type === 'video';
 
-    return (
-      <div className="flex flex-col items-center justify-center p-4 text-white max-w-screen-lg mx-auto">
-        <div className="w-full max-w-4xl max-h-[70vh] flex items-center justify-center overflow-hidden rounded-xl border border-gray-700 bg-black">
-          {isVideo ? (
-            <video
-              controls
-              playsInline
-              src={slide.sources?.[0]?.src}
-              className="w-full h-full object-contain"
-            />
-          ) : (
-            <img
-              src={slide.src}
-              alt={slide.alt}
-              style={{
-                maxHeight: rect.height * 0.8,
-                maxWidth: '100%',
-                objectFit: 'contain'
-              }}
-            />
-          )}
-        </div>
+        return (
+          <div className="flex flex-col items-center justify-center p-4 text-white max-w-screen-lg mx-auto">
+            <div className="w-full max-w-4xl max-h-[70vh] flex items-center justify-center overflow-hidden rounded-xl border border-gray-700 bg-black">
+              {isVideo ? (
+                <video
+                  controls
+                  playsInline
+                  src={customSlide.sources?.[0]?.src}
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <img
+                  src={customSlide.src}
+                  alt={customSlide.alt}
+                  style={{
+                    maxHeight: rect.height * 0.8,
+                    maxWidth: '100%',
+                    objectFit: 'contain'
+                  }}
+                />
+              )}
+            </div>
 
-        {/* Title, Description, PublishedAt */}
-        <div className="mt-6 text-center space-y-2">
-          {slide.alt && (
-            <h3 className="text-2xl font-bold font-mono tracking-wide">{slide.alt}</h3>
-          )}
-          {typeof slide.description === 'string' && (
-            <p className="text-gray-300 text-sm max-w-xl mx-auto">{slide.description}</p>
-          )}
-          {slide.publishedAt && (
-            <p className="text-xs text-gray-500 mt-1">
-              {new Date(slide.publishedAt).toLocaleDateString()}
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
-}}
-
+            <div className="mt-6 text-center space-y-2">
+              {customSlide.alt && (
+                <h3 className="text-2xl font-bold font-mono tracking-wide">{customSlide.alt}</h3>
+              )}
+              {typeof customSlide.description === 'string' && (
+                <p className="text-gray-300 text-sm max-w-xl mx-auto">{customSlide.description}</p>
+              )}
+              {customSlide.publishedAt && (
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(customSlide.publishedAt).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      }
+    }}
 />
 
     </section>
