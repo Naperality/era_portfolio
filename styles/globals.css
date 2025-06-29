@@ -52,3 +52,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* styles/globals.css */
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

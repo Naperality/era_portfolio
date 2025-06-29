@@ -1,6 +1,15 @@
+/* GalleryPage.tsx*/
+
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import Masonry from 'react-masonry-css';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import VideoPlugin from 'yet-another-react-lightbox/plugins/video';
+import Captions from 'yet-another-react-lightbox/plugins/captions';
+import type { Slide } from 'yet-another-react-lightbox';
+
+import { ReactNode , useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { motion, useInView } from 'framer-motion';
 import { fetchGalleryItems } from '@/lib/fetchGalleryItems';
@@ -15,6 +24,8 @@ import {
   Video
 } from 'lucide-react';
 
+import '@/styles/globals.css'; // Ensure this has `.masonry-column` class
+
 type GalleryItem = {
   id: string;
   title: string;
@@ -25,25 +36,50 @@ type GalleryItem = {
   publishedAt?: string;
 };
 
-const IconTitle = ({
-  icon: Icon,
-  text,
-  color
-}: {
-  icon: React.ElementType;
-  text: string;
-  color: string;
-}) => (
+type ExtendedSlide = Slide & {
+  alt?: string;
+  description?: ReactNode;
+  publishedAt?: string;
+};
+
+const IconTitle = ({ icon: Icon, text, color }: { icon: React.ElementType; text: string; color: string }) => (
   <div className="flex items-center justify-center gap-2">
     <Icon size={28} strokeWidth={2.2} className={color} />
     <span>{text}</span>
   </div>
 );
 
+const GallerySkeleton = () => {
+  return (
+    <Masonry
+      breakpointCols={{ default: 3, 1024: 2, 640: 1 }}
+      className="flex gap-6"
+      columnClassName="masonry-column"
+    >
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="animate-pulse overflow-hidden rounded-xl shadow-lg border border-gray-700 bg-black/20 backdrop-blur"
+        >
+          <div className="w-full h-[250px] bg-gray-800" />
+          <div className="p-4 space-y-2">
+            <div className="h-4 w-3/4 bg-gray-700 rounded" />
+            <div className="h-3 w-5/6 bg-gray-600 rounded" />
+            <div className="h-3 w-1/2 bg-gray-500 rounded" />
+          </div>
+        </div>
+      ))}
+    </Masonry>
+  );
+};
+
+
 export default function GalleryPage() {
-  const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [fading, setFading] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxItems, setLightboxItems] = useState<any[]>([]);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -51,50 +87,71 @@ export default function GalleryPage() {
   useEffect(() => {
     fetchGalleryItems().then((items) => {
       setGallery(items);
-      setLoading(false);
+      setLoading(false); // <-- set loading to false after data is fetched
     });
   }, []);
 
-  // Scroll to section hash AFTER content is loaded
   useEffect(() => {
-    if (!loading && typeof window !== 'undefined') {
+    if (gallery.length > 0) {
       const hash = window.location.hash;
       if (hash) {
         const el = document.querySelector(hash);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-  }, [loading, pathname, searchParams]);
-
-  const groupByCategory = (category: string) =>
-    gallery.filter((item) => item.category === category);
+  }, [gallery, pathname, searchParams]);
 
   const handleBack = () => {
     setFading(true);
-    setTimeout(() => {
-      router.push('/');
-    }, 600);
+    setTimeout(() => router.push('/'), 600);
   };
+
+  const openLightbox = (index: number, items: GalleryItem[]) => {
+  const formatted = items.map((item) =>
+    item.mediaType === 'image'
+      ? {
+          src: item.url,
+          alt: item.title,
+          description: item.description,
+          publishedAt: item.publishedAt
+        }
+      : {
+          type: 'video',
+          width: 1280,
+          height: 720,
+          poster: '',
+          sources: [{ src: item.url, type: 'video/mp4' }],
+          description: item.description,
+          alt: item.title,
+          publishedAt: item.publishedAt
+        }
+  );
+  setLightboxItems(formatted);
+  setLightboxIndex(index);
+};
+
 
   const Section = ({
     id,
     title,
     icon,
     color,
-    items,
-    type = 'image'
+    items
   }: {
     id: string;
     title: string;
     icon: React.ElementType;
     color: string;
     items: GalleryItem[];
-    type?: 'image' | 'video';
   }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+    const breakpointColumns = {
+      default: 3,
+      1024: 2,
+      640: 1
+    };
 
     return (
       <motion.section
@@ -113,66 +170,60 @@ export default function GalleryPage() {
           </h2>
         </div>
 
-        <div
-          className={`grid grid-cols-1 ${
-            type === 'image' ? 'sm:grid-cols-2 md:grid-cols-3' : 'md:grid-cols-2'
-          } gap-6`}
-        >
-          {items.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{
-                opacity: isInView ? 1 : 0,
-                scale: isInView ? 1 : 0.95
-              }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`overflow-hidden rounded-xl shadow-lg border ${
-                item.mediaType === 'image'
-                  ? 'border-cyan-600'
-                  : 'border-indigo-600'
-              } bg-black/20 backdrop-blur`}
-            >
-              {item.mediaType === 'image' ? (
-                <img
-                  loading="lazy"
-                  src={item.url}
-                  alt={item.title}
-                  className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
-                />
-              ) : (
-                <video
-                  controls
-                  className="w-full h-full object-contain max-h-[400px] sm:max-h-[500px]"
-                >
-                  <source src={item.url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-
-              <div className="p-4 space-y-1 text-white">
-                <h3 className="text-lg font-semibold">{item.title}</h3>
-                {item.description && (
-                  <p className="text-sm text-gray-300">{item.description}</p>
+        {loading ? (
+          <GallerySkeleton />
+        ) : (
+          <Masonry
+            breakpointCols={breakpointColumns}
+            className="flex gap-6"
+            columnClassName="masonry-column"
+          >
+            {items.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onClick={() => openLightbox(index, items)}
+                className="cursor-zoom-in overflow-hidden rounded-xl shadow-lg border bg-black/20 backdrop-blur border-cyan-600 hover:ring hover:ring-cyan-500/50 transition"
+              >
+                {item.mediaType === 'image' ? (
+                  <img
+                    src={item.url}
+                    alt={item.title}
+                    className="w-full object-cover rounded-t-xl"
+                  />
+                ) : (
+                  <video
+                    muted
+                    playsInline
+                    loop
+                    src={item.url}
+                    className="w-full max-h-[400px] rounded-t-xl object-contain"
+                  />
                 )}
-                {item.publishedAt && (
-                  <p className="text-xs text-gray-400">
-                    {new Date(item.publishedAt).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                <div className="p-3 text-sm text-white">
+                  <h3 className="font-semibold text-lg">{item.title}</h3>
+                  {item.description && <p className="text-gray-400">{item.description}</p>}
+                  {item.publishedAt && (
+                    <p className="text-xs text-gray-500">
+                      {new Date(item.publishedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </Masonry>
+        )}
       </motion.section>
     );
   };
 
+  const group = (c: string) => gallery.filter((g) => g.category === c);
+
   return (
     <section
-      className={`min-h-screen px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white space-y-20 transition-opacity duration-500 ${
-        fading ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
+      className={`min-h-screen px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white space-y-20 transition-opacity duration-500 ${fading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
       <button
         onClick={handleBack}
@@ -181,82 +232,78 @@ export default function GalleryPage() {
         ← Back to Home
       </button>
 
-      {/* 2D Section Divider */}
-      <div
-        id="section-2D"
-        className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600 border-opacity-30"
-      >
-        <Paintbrush
-          strokeWidth={2.5}
-          className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-cyan-400"
-        />
+      <div id="section-2D" className="scroll-mt-32 flex items-center justify-center gap-3 text-cyan-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-cyan-600/30">
+        <Paintbrush strokeWidth={2.5} className="w-10 h-10 text-cyan-400" />
         2D Digital Art Section
       </div>
 
-      {loading ? (
-        <div className="text-center py-20 text-gray-400 font-mono text-lg animate-pulse">
-          Loading gallery...
-        </div>
-      ) : (
-        <>
-          <Section
-            id="character"
-            title="2D – Character"
-            icon={User}
-            color="text-cyan-400"
-            items={groupByCategory('characterArt')}
-          />
-          <Section
-            id="background"
-            title="2D – Background"
-            icon={ImageIcon}
-            color="text-cyan-400"
-            items={groupByCategory('backgroundArt')}
-          />
-          <Section
-            id="fanart"
-            title="2D – Fanart"
-            icon={Heart}
-            color="text-cyan-400"
-            items={groupByCategory('fanart')}
-          />
+      <Section id="character" title="2D – Character" icon={User} color="text-cyan-400" items={group('characterArt')} />
+      <Section id="background" title="2D – Background" icon={ImageIcon} color="text-cyan-400" items={group('backgroundArt')} />
+      <Section id="fanart" title="2D – Fanart" icon={Heart} color="text-cyan-400" items={group('fanart')} />
 
-          {/* 3D Section Divider */}
-          <div
-            id="section-3D"
-            className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-2xl sm:text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600 border-opacity-30"
-          >
-            <Box
-              strokeWidth={2.5}
-              className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 text-indigo-400"
+      <div id="section-3D" className="scroll-mt-32 flex items-center justify-center gap-3 text-indigo-400 text-3xl md:text-4xl font-bold font-mono uppercase tracking-wider py-6 border-b border-indigo-600/30">
+        <Box strokeWidth={2.5} className="w-10 h-10 text-indigo-400" />
+        3D Digital Art Section
+      </div>
+
+      <Section id="model" title="3D – Model" icon={Package} color="text-indigo-400" items={group('model3D')} />
+      <Section id="asset" title="3D – Asset" icon={Shapes} color="text-indigo-400" items={group('asset3D')} />
+      <Section id="timelapse" title="Timelapse Videos" icon={Video} color="text-pink-400" items={group('timelapseVideos')} />
+
+      <Lightbox
+  index={lightboxIndex ?? -1}
+  open={lightboxIndex !== null}
+  close={() => setLightboxIndex(null)}
+  slides={lightboxItems}
+  plugins={[VideoPlugin]}
+  render={{
+  slide: ({ slide, rect }: { slide: ExtendedSlide; rect: any }) => {
+    const isVideo = slide.type === 'video';
+
+    return (
+      <div className="flex flex-col items-center justify-center p-4 text-white max-w-screen-lg mx-auto">
+        <div className="w-full max-w-4xl max-h-[70vh] flex items-center justify-center overflow-hidden rounded-xl border border-gray-700 bg-black">
+          {isVideo ? (
+            <video
+              controls
+              playsInline
+              src={slide.sources?.[0]?.src}
+              className="w-full h-full object-contain"
             />
-            3D Digital Art Section
-          </div>
+          ) : (
+            <img
+              src={slide.src}
+              alt={slide.alt}
+              style={{
+                maxHeight: rect.height * 0.8,
+                maxWidth: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          )}
+        </div>
 
-          <Section
-            id="model"
-            title="3D – Model"
-            icon={Package}
-            color="text-indigo-400"
-            items={groupByCategory('model3D')}
-          />
-          <Section
-            id="asset"
-            title="3D – Asset"
-            icon={Shapes}
-            color="text-indigo-400"
-            items={groupByCategory('asset3D')}
-          />
-          <Section
-            id="timelapse"
-            title="Timelapse Videos"
-            icon={Video}
-            color="text-pink-400"
-            type="video"
-            items={groupByCategory('timelapseVideos')}
-          />
-        </>
-      )}
+        {/* Title, Description, PublishedAt */}
+        <div className="mt-6 text-center space-y-2">
+          {slide.alt && (
+            <h3 className="text-2xl font-bold font-mono tracking-wide">{slide.alt}</h3>
+          )}
+          {typeof slide.description === 'string' && (
+            <p className="text-gray-300 text-sm max-w-xl mx-auto">{slide.description}</p>
+          )}
+          {slide.publishedAt && (
+            <p className="text-xs text-gray-500 mt-1">
+              {new Date(slide.publishedAt).toLocaleDateString()}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+}}
+
+/>
+
     </section>
   );
 }
